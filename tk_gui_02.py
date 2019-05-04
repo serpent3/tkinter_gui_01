@@ -1,9 +1,13 @@
 from tkinter import *
 import json
 
+
 class Block:
-    def __init__(self, root):
+    def __init__(self, root, READ_FUNC, DELETE_FUNC, SAVE_FUNC):
         self.root = root
+        self.READ_FUNC = READ_FUNC
+        self.DELETE_FUNC = DELETE_FUNC
+        self.SAVE_FUNC = SAVE_FUNC
 
         # Блоки окна
         self.left_frame = LabelFrame(text="Категории продуктов")
@@ -70,12 +74,12 @@ class Block:
 
     #######################################
     # Чтение данных из внешнего источника
-    def read_lists(self, func=NONE):
-        # self.dict_lists = func()
-        with open("LISTS.json", "r", encoding="utf-8") as f:
-            global dict_lists
-            self.dict_lists = {}
-            self.dict_lists = json.loads(f.read())
+    def read_lists(self):
+        self.dict_lists = self.READ_FUNC()
+        # with open("LISTS.json", "r", encoding="utf-8") as f:
+        #     global dict_lists
+        #     self.dict_lists = {}
+        #     self.dict_lists = json.loads(f.read())
 
     # Функция основляющая списки
     def items_tracer(self, *args):
@@ -147,8 +151,9 @@ class Block:
                 self.dict_lists.pop(name)
                 # Items.pop(name)
 
-        with open("LISTS.json", "w") as f:
-            f.write(json.dumps(self.dict_lists, ensure_ascii=False))
+        self.DELETE_FUNC(self.dict_lists)
+        # with open("LISTS.json", "w") as f:
+        #     f.write(json.dumps(self.dict_lists, ensure_ascii=False))
 
         # Всё убираем из левого фрейма
         lst = self.left_frame.winfo_children()
@@ -192,9 +197,11 @@ class Block:
     def save(self):
         name = self.entry_list_name.get()
         if name:
-            with open("LISTS.json", "w") as f:
-                self.dict_lists.update({name:[*self.list_out.get(0, END)]})
-                f.write(json.dumps(self.dict_lists, ensure_ascii=False))
+            self.dict_lists.update({name:[*self.list_out.get(0, END)]})
+            self.SAVE_FUNC(self.dict_lists)
+            # with open("LISTS.json", "w") as f:
+            #     self.dict_lists.update({name:[*self.list_out.get(0, END)]})
+            #     f.write(json.dumps(self.dict_lists, ensure_ascii=False))
 
             # Лейбл показывает статус сохранения и удаляется через 2,5 секунды
             l_info = Label(self.right_frame, width=20, text="Список {}\nсохранён".format(name))
