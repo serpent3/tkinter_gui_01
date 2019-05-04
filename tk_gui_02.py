@@ -3,11 +3,12 @@ import json
 
 
 class Block:
-    def __init__(self, root, READ_FUNC, DELETE_FUNC, SAVE_FUNC):
+    def __init__(self, root, READ_FUNC, DELETE_FUNC, SAVE_FUNC, MAKE_FUNC):
         self.root = root
         self.READ_FUNC = READ_FUNC
         self.DELETE_FUNC = DELETE_FUNC
         self.SAVE_FUNC = SAVE_FUNC
+        self.MAKE_FUNC = MAKE_FUNC
 
         # Блоки окна
         self.left_frame = LabelFrame(text="Категории продуктов")
@@ -37,6 +38,9 @@ class Block:
         self.button_save.pack(side=TOP, fill=X)
 
         self.button_del_list = Button(self.right_frame, text="Удалить список", command=self.del_list)
+        self.button_del_list.pack(side=TOP, fill=X)
+
+        self.button_del_list = Button(self.right_frame, text="СОРТИРОВКА", command=self.make_func)
         self.button_del_list.pack(side=TOP, fill=X)
         # Кнопки
 
@@ -244,6 +248,22 @@ class Block:
         self.cancel_button.destroy()
 
     #######################################
+
+    def make_func(self):
+        label = Label(self.right_frame, width=20, text="Папка для сортировки:")
+        label.pack()
+
+        self.entry = Entry(self.right_frame)
+        self.entry.pack(anchor=N)
+
+        button = Button(self.right_frame, text="Сортировать", command=self.sort)
+        button.pack(side=TOP, fill=X)
+
+    def sort(self):
+        if self.entry.get():
+            self.MAKE_FUNC(self.entry.get())
+
+
 
 
 
