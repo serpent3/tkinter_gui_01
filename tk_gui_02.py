@@ -260,8 +260,29 @@ class Block:
         button.pack(side=TOP, fill=X)
 
     def sort(self):
+        print(self.Items)
+
+        self.dirs = {}
+        self.l = []
+
+        for name in self.Items.keys():
+
+            # print('Название папки :: ', name)
+            # print('Значение галочки :: ', self.Items[name].get())
+            # print('Значения :: ', self.dict_lists[name])
+
+
+            self.l = [i for i in self.dict_lists[name]]
+            print(self.l)
+
+            if self.Items[name].get():
+                self.dirs.update({name : self.l}) # self.dict_lists[name]})
+
+            print(self.dirs)
+
+
         if self.entry.get():
-            self.MAKE_FUNC(self.entry.get())
+            self.MAKE_FUNC(self.entry.get(),  self.dirs) #, self.lists)
 
 
 
