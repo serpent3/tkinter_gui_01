@@ -1,5 +1,4 @@
 from tkinter import *
-import json
 
 
 class Block:
@@ -11,12 +10,12 @@ class Block:
         self.MAKE_FUNC = MAKE_FUNC
 
         # Блоки окна
-        self.left_frame = LabelFrame(text="Категории продуктов")
+        self.left_frame = LabelFrame(text="Категории")
         self.left_frame.pack(side=LEFT, padx=10, pady=10)
         self.left_frame_label = Label(self.left_frame)
         self.left_frame_label.pack()
 
-        self.right_frame = LabelFrame(text="Список продуктов")
+        self.right_frame = LabelFrame(text="Новый список")
         self.right_frame.pack(side=RIGHT, padx=10, pady=10)
         self.right_frame_label = Label(self.right_frame)
         self.right_frame_label.pack()
@@ -248,8 +247,13 @@ class Block:
         self.cancel_button.destroy()
 
     #######################################
-
+    # Функция сортировки файлов
     def make_func(self):
+        if not any(self.Items[name].get() for name in self.Items.keys()):
+            label = Label(self.right_frame, width=20, text="Выберите списки\nв соответствии\n"
+                                                           " с которыми сортировать\n")
+            label.pack()
+
         label = Label(self.right_frame, width=20, text="Папка для сортировки:")
         label.pack()
 
@@ -263,7 +267,6 @@ class Block:
         print(self.Items)
 
         self.dirs = {}
-        self.l = []
 
         for name in self.Items.keys():
 
@@ -271,18 +274,11 @@ class Block:
             # print('Значение галочки :: ', self.Items[name].get())
             # print('Значения :: ', self.dict_lists[name])
 
-
-            self.l = [i for i in self.dict_lists[name]]
-            print(self.l)
-
             if self.Items[name].get():
-                self.dirs.update({name : self.l}) # self.dict_lists[name]})
-
-            print(self.dirs)
-
+                self.dirs.update({name : self.dict_lists[name]})
 
         if self.entry.get():
-            self.MAKE_FUNC(self.entry.get(),  self.dirs) #, self.lists)
+            self.MAKE_FUNC(self.entry.get(),  self.dirs)
 
 
 
